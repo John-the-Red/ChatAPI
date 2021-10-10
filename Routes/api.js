@@ -1,4 +1,3 @@
-//dependancies
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
@@ -8,116 +7,162 @@ var fs = require('fs');
 //---------------------------------------------------------------Endpoints/Routers
 
 
-
-
-//base route localhost:3000
-//get all of a resource
-router.get('/',function(req,res){
+router.get('/News',function(req,res){
     try{
-        var rawdata = fs.readFileSync('data.json'); //<buffer <hex code> //asynconise: continues running / syncronise: Halts and waits for input
-        var students = JSON.parse(rawdata);
-    //fs/promises are non standard uses to start/stop code
-        console.log(students);
+        var rawdata = fs.readFileSync('News.json'); 
+        var Users = JSON.parse(rawdata);
+        console.log(Users);
     
     
     
-        res.status(200).json({message: students});
+        res.status(200).json({message: Users});
+    } catch (err){
+        res.status(500).json({message: err.message});
+    }
+});
+router.get('/Game_Forum',function(req,res){
+    try{
+        var rawdata = fs.readFileSync('Game_Forum.json'); 
+        var Users = JSON.parse(rawdata);
+        console.log(Users);
+    
+    
+    
+        res.status(200).json({message: Users});
     } catch (err){
         res.status(500).json({message: err.message});
     }
     
 });
-//create an object
-router.post('/', function(req,res){
+router.post('/Game_Forum', function(req,res){
     try{
-        //open the file
         console.log("Posted Object is: ", req.body);
-        const rawdata = fs.readFileSync('data.json');
-        //decode the file(parse) se we can use it
-        var students = JSON.parse(rawdata);
-        //add data, but controlled
+        const rawdata = fs.readFileSync('Game_Forum.json');
+        var Users = JSON.parse(rawdata);
         var rawbody = req.body;
 
         var newObj = 
         {
+            Forum: "Game",
             name: null,
-            age: null,
-            currentGame: null
+            Text: null,
+        };
+        if(rawbody.Forum != null)
+        {
+            newObj.Forum= rawbody.Forum;
         };
         if(rawbody.name != null)
         {
         newObj.name = rawbody.name;
         };
-        if(rawbody.age != null)
+        if(rawbody.Text != null)
         {
-            newObj.age = rawbody.age;
+            newObj.Text= rawbody.Text;
         };
-        if(rawbody.currentGame != null)
-        {
-            newObj.currentGame = rawbody.currentGame;
-        };
-        
-        //add data, but controlled
 
-        newObj._id = students.length;
-        //get the actual index       
-        students.push(newObj);
-        //save(write) the data back to file
-        const data = fs.writeFileSync('data.json', JSON.stringify(students));
+        newObj._id = Users.length;     
+        Users.push(newObj);
+        const data = fs.writeFileSync('Game_Forum.json', JSON.stringify(Users));
 
-        //return the data back to user
         res.status(201).json(newObj);
     } catch (err){
         res.status(500).json({message: err.message});
     }
 });
-router.patch('/:id', function(req,res){
+router.post('/News', function(req,res){
     try{
-        //open the file
-        console.log("Object being patched is: ",req.params.id, req.body);
-        const rawdata = fs.readFileSync('data.json');
-        //decode the file(parse) se we can use it
-        var students = JSON.parse(rawdata);
-        var id = req.params.id;
-        //add data, but controlled
+        console.log("Posted Object is: ", req.body);
+        const rawdata = fs.readFileSync('News.json');
+        var Users = JSON.parse(rawdata);
         var rawbody = req.body;
 
+        var newObj = 
+        {
+            Forum: "News",
+            name: null,
+            Text: null,
+        };
+        if(rawbody.Forum != null)
+        {
+            newObj.Forum= rawbody.Forum;
+        };
         if(rawbody.name != null)
         {
-        students[id].name = rawbody.name;
+        newObj.name = rawbody.name;
         };
-        if(rawbody.age != null)
+        if(rawbody.Text != null)
         {
-            students[id].age = rawbody.age;
+            newObj.Text= rawbody.Text;
         };
-        if(rawbody.currentGame != null)
-        {
-            students[id].currentGame = rawbody.currentGame;
-        };
-        
-        //add data, but controlled
 
-        students[id]._id = students.length;
-        //save(write) the data back to file
-        const data = fs.writeFileSync('data.json', JSON.stringify(students));
+        newObj._id = Users.length;     
+        Users.push(newObj);
+        const data = fs.writeFileSync('News.json', JSON.stringify(Users));
 
-        //return the data back to user
-        res.status(200).json(students[id]);
+        res.status(201).json(newObj);
     } catch (err){
         res.status(500).json({message: err.message});
     }
 });
-router.delete('/:id', function(req,res){
-    //storing id
+router.patch('/Game_Forum/:id', function(req,res){
+    try{
+        console.log("Object being patched is: ",req.params.id, req.body);
+        const rawdata = fs.readFileSync('Game_Forum.json');
+        var Users = JSON.parse(rawdata);
+        var id = req.params.id;
+        var rawbody = req.body;
+
+        if(rawbody.name != null)
+        {
+            Users[id].name = rawbody.name;
+        };
+        if(rawbody.Text != null)
+        {
+            Users[id].Text = rawbody.Text;
+        };
+
+        Users[id]._id = Users.length;
+        const data = fs.writeFileSync('Game_Forum.json', JSON.stringify(Users));
+
+        res.status(200).json(Users[id]);
+    } catch (err){
+        res.status(500).json({message: err.message});
+    }
+});
+router.patch('/News/:id', function(req,res){
+    try{
+        console.log("Object being patched is: ",req.params.id, req.body);
+        const rawdata = fs.readFileSync('News.json');
+        var Users = JSON.parse(rawdata);
+        var id = req.params.id;
+        var rawbody = req.body;
+
+        if(rawbody.name != null)
+        {
+            Users[id].name = rawbody.name;
+        };
+        if(rawbody.Text != null)
+        {
+            Users[id].Text = rawbody.Text;
+        };
+
+        Users[id]._id = Users.length;
+        const data = fs.writeFileSync('News.json', JSON.stringify(Users));
+
+        res.status(200).json(Users[id]);
+    } catch (err){
+        res.status(500).json({message: err.message});
+    }
+});
+router.delete('/Game_Forum/:id', function(req,res){
+
     var id = req.params.id
-    //open the file
-    var rawdata = fs.readFileSync('data.json'); 
-        var students = JSON.parse(rawdata);
-        //delete id/comfirm
-    if(students.length > id) {
-        students.splice(id,1);
-         //write back to file   
-        const data = fs.writeFileSync('data.json', JSON.stringify(students));
+    var rawdata = fs.readFileSync('Game_Forum.json'); 
+        var Users = JSON.parse(rawdata);
+
+    if(Users.length > id) {
+        Users.splice(id,1);
+        const data = fs.writeFileSync('Game_Forum.json', JSON.stringify(Users));
 
         res.status(200).json({message:"ok"});
         
@@ -126,9 +171,27 @@ router.delete('/:id', function(req,res){
     {
         res.status(500).json({message: "An error occurred"});
     }
-    //if no item found throw error message
     
-})
+});
+router.delete('/News/:id', function(req,res){
+
+    var id = req.params.id
+    var rawdata = fs.readFileSync('News.json'); 
+        var Users = JSON.parse(rawdata);
+
+    if(Users.length > id) {
+        Users.splice(id,1);
+        const data = fs.writeFileSync('News.json', JSON.stringify(Users));
+
+        res.status(200).json({message:"ok"});
+        
+    }
+    else
+    {
+        res.status(500).json({message: "An error occurred"});
+    }
+    
+});
 //get - retrieve an object
 //post - creating an object
 //patch/put - updating an object
@@ -140,7 +203,5 @@ router.delete('/:id', function(req,res){
 
 
 //------------------------------------------------------------------------endpoints/routers
-
-//this folder is a module. It needs to be exported to index so it needs to be equal to the router to do so
 
 module.exports = router;
