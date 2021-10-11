@@ -46,6 +46,7 @@ router.post('/Game_Forum', function(req,res){
             Forum: "Game",
             name: null,
             Text: null,
+            Time: Date.now()
         };
         if(rawbody.Forum != null)
         {
@@ -81,6 +82,7 @@ router.post('/News', function(req,res){
             Forum: "News",
             name: null,
             Text: null,
+            Time: Date.now()
         };
         if(rawbody.Forum != null)
         {
@@ -120,6 +122,10 @@ router.patch('/Game_Forum/:id', function(req,res){
         {
             Users[id].Text = rawbody.Text;
         };
+        if(rawbody.Time != null)
+        {
+            Users[id].Time = Date.now();
+        }
 
         Users[id]._id = Users.length;
         const data = fs.writeFileSync('Game_Forum.json', JSON.stringify(Users));
@@ -145,6 +151,10 @@ router.patch('/News/:id', function(req,res){
         {
             Users[id].Text = rawbody.Text;
         };
+        if(rawbody.Time != null)
+        {
+            Users[id].Time = Date.now();
+        }
 
         Users[id]._id = Users.length;
         const data = fs.writeFileSync('News.json', JSON.stringify(Users));
